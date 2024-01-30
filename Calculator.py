@@ -1,3 +1,4 @@
+# GUI calculator in Python 
 from tkinter import *
 root = Tk()
 root.title("Calculator")
