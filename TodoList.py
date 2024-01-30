@@ -1,41 +1,53 @@
+# Code for a GUI-based To-Do List application in Python
+
 from tkinter import *
+
 root = Tk()
-root.title("Calculator")
-root.configure(bg='gray10')
-lbl_welcome = Label(root, text="Welcome", bg="gray10", fg="white")
-lbl_welcome.grid(row=0, column=0)
-label_n1 = Label(root, text="Enter the first number:", bg="gray10", fg="white")
-label_n1.grid(row=1, column=0)
-entry_n1 = Entry(root)
-entry_n1.grid(row=1, column=1)
-label_operator = Label(root, text="Enter operator (+,-,*,/,%) :", bg="gray10", fg="white")
-label_operator.grid(row=2, column=0)
-entry_operator = Entry(root)
-entry_operator.grid(row=2, column=1)
-label_n2 = Label(root, text="Enter the second number:", bg="gray10", fg="white")
-label_n2.grid(row=3, column=0)
-entry_n2 = Entry(root)
-entry_n2.grid(row=3, column=1)
-lbl_result = Label(root, text="", bg="gray10", fg="white")
-lbl_result.grid(row=5, column=0, columnspan=2)
-def calculate_result():
-    n1 = int(entry_n1.get())
-    operator = entry_operator.get()
-    n2 = int(entry_n2.get())
-    result = ""
-    if operator == "+":
-        result = n1 + n2
-    elif operator == "-":
-        result = n1 - n2
-    elif operator == "*":
-        result = n1 * n2
-    elif operator == "/":
-        result = n1 / n2
-    elif operator == "%":
-        result = n1 % n2
+root.title("To-Do List")
+
+tasks = []
+
+def update_listbox():
+    clear_listbox()
+    for task in tasks:
+        lb_tasks.insert("end", task)
+
+def clear_listbox():
+    lb_tasks.delete(0, "end")
+
+def add_task():
+    task = txt_input.get()
+    if task != "":
+        tasks.append(task)
+        update_listbox()
     else:
-        result = "Invalid Operator"
-    lbl_result["text"] = f"Result: {result}"
-btn_calculate = Button(root, text="Calculate", bg="dark green", command=calculate_result)
-btn_calculate.grid(row=4, column=0, columnspan=2)
+        lbl_display["text"] = "Please enter a task."
+
+def delete_task():
+    task = lb_tasks.get("active")
+    if task in tasks:
+        tasks.remove(task)
+        update_listbox()
+
+lbl_title = Label(root, text="To-Do List", bg="lightblue")
+lbl_title.grid(row=0, column=0)
+
+lbl_display = Label(root, text="", bg="lightblue")
+lbl_display.grid(row=3, column=0)
+
+txt_input = Entry(root, width=15)
+txt_input.grid(row=1, column=0)
+
+btn_add = Button(root, text="Add Task", fg="green", bg="lightblue", command=add_task)
+btn_add.grid(row=1, column=1)
+
+btn_delete = Button(root, text="Delete Task", fg="red", bg="lightblue", command=delete_task)
+btn_delete.grid(row=1, column=2)
+
+btn_clear = Button(root, text="Clear List", fg="blue", bg="lightblue", command=clear_listbox)
+btn_clear.grid(row=2, column=1)
+
+lb_tasks = Listbox(root, bg="lightyellow")
+lb_tasks.grid(row=2, column=0, rowspan=1, columnspan=3)
+
 root.mainloop()
